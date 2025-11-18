@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
     Tooltip,
-    ResponsiveContainer
+    ResponsiveContainer,
 } from "recharts";
 export default function Table() {
     const [users, setUsers] = useState(dataJson);
@@ -107,11 +107,9 @@ export default function Table() {
 
     // -------- Delete User --------
     // -------- Delete User --------
-const deleteUser = (id) => {
-    
-
-    setUsers(users.filter((u) => u.id !== id));
-};
+    const deleteUser = (id) => {
+        setUsers(users.filter((u) => u.id !== id));
+    };
 
     // -------- Sort --------
     const sortByName = () => {
@@ -125,11 +123,11 @@ const deleteUser = (id) => {
     };
 
     // -------- Filtering --------
-   const filteredUsers = users.filter((user) =>
-    Object.values(user).some((value) =>
-        String(value).toLowerCase().includes(search.toLowerCase())
-    )
-);
+    const filteredUsers = users.filter((user) =>
+        Object.values(user).some((value) =>
+            String(value).toLowerCase().includes(search.toLowerCase())
+        )
+    );
 
     // -------- Pagination Logic --------
     const indexOfLast = currentPage * usersPerPage;
@@ -144,33 +142,59 @@ const deleteUser = (id) => {
     };
     // --------------نمودار----------------
     // Prepare monthly signup chart
-const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ];
 
-const monthlyCount = Array(12).fill(0);
+    const monthlyCount = Array(12).fill(0);
 
-users.forEach(user => {
-    if (user.date) {
-        const monthIndex = new Date(user.date).getMonth();
-        monthlyCount[monthIndex] += 1;
-    }
-});
+    users.forEach((user) => {
+        if (user.date) {
+            const monthIndex = new Date(user.date).getMonth();
+            monthlyCount[monthIndex] += 1;
+        }
+    });
 
-const chartData = monthNames.map((m, i) => ({
-    month: m,
-    count: monthlyCount[i]
-}));
-useEffect(function(){
-    document.title="user management"
-},[])
-const sortByEmail = () => {
-    const sorted = [...users].sort((a, b) =>
-        sortAsc
-            ? a.email.localeCompare(b.email)
-            : b.email.localeCompare(a.email)
-    );
-    setUsers(sorted);
-    setSortAsc(!sortAsc);
-};
+    const chartData = monthNames.map((m, i) => ({
+        month: m,
+        count: monthlyCount[i],
+    }));
+    useEffect(function () {
+        document.title = "user management";
+    }, []);
+    const sortByEmail = () => {
+        const sorted = [...users].sort((a, b) =>
+            sortAsc
+                ? a.email.localeCompare(b.email)
+                : b.email.localeCompare(a.email)
+        );
+        setUsers(sorted);
+        setSortAsc(!sortAsc);
+    };
+    // ---------style status----------------
+    const getStatusClass = (status) => {
+        switch (status.toLowerCase()) {
+            case "active":
+                return "text-dark fs-6  bg-success rounded-1 p-1"; // سبز
+            case "inactive":
+                return "text-dark fs-6  bg-danger rounded-1 p-1"; // قرمز
+            case "pending":
+                return "text-dark fs-6  bg-warning rounded-1 p-1"; // زرد
+            default:
+                return "";
+        }
+    };
     return (
         <>
             {/* Search */}
@@ -196,72 +220,77 @@ const sortByEmail = () => {
             </button>
 
             {/* Table */}
-            <div className=" table-responsive"><table className="table table-dark table-striped">
-                <thead>
-                    <tr>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                        <th>ID</th>
-                        <th>
-                            <span
-                                onClick={sortByName}
-                                style={{ cursor: "pointer" }}
-                                className="bg-primary me-1 rounded-1 fs-5 p-1"
-                            >
-                                <FaSort />
-                            </span>
-                            Name
-                        </th>
-                        <th>
-                            <span
-                                  onClick={sortByEmail}
-                                style={{ cursor: "pointer" }}
-                                className="bg-primary me-1 rounded-1 fs-5 p-1"
-                            >
-                                <FaSort />
-                            </span>
-                            email
-                        </th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {currentUsers.map((item) => (
-                        <tr key={item.id}>
-                            <td>
+            <div className=" table-responsive">
+                <table className="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                            <th>ID</th>
+                            <th>
                                 <span
-                                    className="text-info fs-5"
+                                    onClick={sortByName}
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => openEditModal(item)}
+                                    className="bg-primary me-1 rounded-1 fs-5 p-1"
                                 >
-                                    <FaEdit />
+                                    <FaSort />
                                 </span>
-                            </td>
-
-                            <td>
+                                Name
+                            </th>
+                            <th>
                                 <span
-                                    className="text-danger "
+                                    onClick={sortByEmail}
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => deleteUser(item.id)}
+                                    className="bg-primary me-1 rounded-1 fs-5 p-1"
                                 >
-                                    <FaTrash />
+                                    <FaSort />
                                 </span>
-                            </td>
-
-                            <td>{item.id}</td>
-                            <td>{item.name}</td>
-                            <td>{item.email}</td>
-                            <td>{item.role}</td>
-                            <td>{item.status}</td>
-                            <td>{item.date}</td>
+                                email
+                            </th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Date</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table></div>
-            
+                    </thead>
+
+                    <tbody>
+                        {currentUsers.map((item) => (
+                            <tr key={item.id}>
+                                <td>
+                                    <span
+                                        className="text-info fs-5"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => openEditModal(item)}
+                                    >
+                                        <FaEdit />
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        className="text-danger "
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => deleteUser(item.id)}
+                                    >
+                                        <FaTrash />
+                                    </span>
+                                </td>
+                                <td>{item.id}</td>
+                                <td>{item.name}</td>
+                                <td>{item.email}</td>
+                                <td>{item.role}</td>
+                                <td>
+                                    <span
+                                        className={getStatusClass(item.status)}
+                                    >
+                                        {item.status}
+                                    </span>
+                                </td>{" "}
+                                <td>{item.date}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Pagination */}
             <div className="mt-3 d-flex justify-content-center">
@@ -311,26 +340,29 @@ const sortByEmail = () => {
                 </ul>
             </div>
             {/* ----------نمودار----------------- */}
-<div className="mt-5 p-4 bg-white rounded shadow mb-4">
-    <h5 className="mb-3">Users per month</h5>
+            <div className="mt-5 p-4 bg-white rounded shadow mb-4">
+                <h5 className="mb-3">Users per month</h5>
 
-    <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="month" stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
-            <Tooltip />
-            <Line
-                type="monotone"
-                dataKey="count"
-                stroke="#3b82f6"
-                strokeWidth={3}
-                dot={{ r: 4, strokeWidth: 2, fill: "#3b82f6" }}
-                activeDot={{ r: 6 }}
-            />
-        </LineChart>
-    </ResponsiveContainer>
-</div>
+                <ResponsiveContainer width="100%" height={280}>
+                    <LineChart
+                        data={chartData}
+                        margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis dataKey="month" stroke="#6b7280" />
+                        <YAxis stroke="#6b7280" />
+                        <Tooltip />
+                        <Line
+                            type="monotone"
+                            dataKey="count"
+                            stroke="#3b82f6"
+                            strokeWidth={3}
+                            dot={{ r: 4, strokeWidth: 2, fill: "#3b82f6" }}
+                            activeDot={{ r: 6 }}
+                        />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
             {/* -------- Edit Modal -------- */}
             {showEditModal && (
                 <div
@@ -470,7 +502,6 @@ const sortByEmail = () => {
                     </div>
                 </div>
             )}
-           
         </>
     );
 }
