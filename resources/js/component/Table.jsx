@@ -164,7 +164,7 @@ useEffect(function(){
     return (
         <>
             {/* Search */}
-            <div className="mb-3 border border-2 border-danger rounded-3">
+            <div className="mb-3 border border-2 border-danger rounded-3 w-100">
                 <input
                     type="text"
                     placeholder="Search by name..."
@@ -179,14 +179,14 @@ useEffect(function(){
 
             {/* Add User Button */}
             <button
-                className="btn btn-primary mb-3 col-2"
+                className="btn btn-primary mb-3 col-12 col-md-2"
                 onClick={openAddModal}
             >
                 Add User
             </button>
 
             {/* Table */}
-            <table className="table table-dark table-striped">
+            <div className=" table-responsive"><table className="table table-dark table-striped">
                 <thead>
                     <tr>
                         <th>Edit</th>
@@ -241,7 +241,8 @@ useEffect(function(){
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </table></div>
+            
 
             {/* Pagination */}
             <div className="mt-3 d-flex justify-content-center">
