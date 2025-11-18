@@ -2,34 +2,55 @@ import React, { useState } from "react";
 import dataJson from "../data.json";
 import { FaTrash, FaSort, FaEdit } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
+
 export default function Table() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
     const [searchParams, setSearchParams] = useSearchParams();
     const pageFromUrl = parseInt(searchParams.get("page")) || 1;
     const [currentPage, setCurrentPage] = useState(pageFromUrl);
+
     // Search
     const [search, setSearch] = useState("");
+
     // Pagination
     const usersPerPage = 10;
-    // Modal
+
+    // Modal for Edit
     const [showModal, setShowModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
-    // ---- open modal ----
+
+    // Modal for Add User
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newName, setNewName] = useState("");
+    const [newEmail, setNewEmail] = useState("");
+    const [newRole, setNewRole] = useState("");
+    const [newStatus, setNewStatus] = useState("");
+    const [newDate, setNewDate] = useState("");
+
+    // ---- open modal for editing ----
     const openModal = (user) => {
         setEditUser(user);
         setEditName(user.name);
         setEditEmail(user.email);
         setShowModal(true);
     };
+
+    // ---- open modal for adding user ----
+    const openAddModal = () => {
+        setShowAddModal(true);
+    };
+
     // ---- close modal ----
     const closeModal = () => {
         setShowModal(false);
+        setShowAddModal(false);
         setEditUser(null);
     };
-    // ---- save changes ----
+
+    // ---- save changes (edit) ----
     const saveChanges = () => {
         const updated = users.map((item) =>
             item.id === editUser.id
@@ -37,6 +58,37 @@ export default function Table() {
                 : item
         );
         setUsers(updated);
+        closeModal();
+    };
+
+    // ---- save new user ----
+    const saveNewUser = () => {
+        if (
+            newName.length < 3 ||
+            newEmail.length < 3 ||
+            newRole.length < 3 ||
+            newStatus.length < 3 ||
+            !newDate
+        ) {
+            alert("Please fill out all fields with at least 3 characters.");
+            return;
+        }
+
+        const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+        if (!emailRegex.test(newEmail)) {
+            alert("Please enter a valid email.");
+            return;
+        }
+
+        const newUser = {
+            id: users.length + 1, // Automatically assign new ID
+            name: newName,
+            email: newEmail,
+            role: newRole,
+            status: newStatus,
+            date: newDate,
+        };
+        setUsers([...users, newUser]);
         closeModal();
     };
 
@@ -61,18 +113,19 @@ export default function Table() {
         user.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    // ---------------- Pagination  ----------------
+    // ---------------- Pagination ----------------
     const indexOfLast = currentPage * usersPerPage;
     const indexOfFirst = indexOfLast - usersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-//   --------------------change url----------------
-const goToPage = (page) => {
-    setCurrentPage(page);
-    setSearchParams({ page: page });
-};
+    //   --------------------change url----------------
+    const goToPage = (page) => {
+        setCurrentPage(page);
+        setSearchParams({ page: page });
+    };
+
     return (
         <>
             {/* Search */}
@@ -87,6 +140,11 @@ const goToPage = (page) => {
                         setCurrentPage(1);
                     }}
                 />
+            </div>
+
+            {/* Add User Button */}
+            <div className="col btn btn-primary mb-3" onClick={openAddModal}>
+                Add User
             </div>
 
             <table className="table mb-0 table-dark table-striped">
@@ -147,62 +205,64 @@ const goToPage = (page) => {
             </table>
 
             {/* ---------------- Pagination ---------------- */}
-            <div className="mt-3 d-flex justify-content-center">
-                <nav>
-                    <ul className="pagination">
-                        {/* Prev Button */}
-                        <li
-                            className={`page-item ${
-                                currentPage === 1 && "disabled"
-                            }`}
-                        >
-                            <button
-                                className="page-link"
-                                onClick={() => goToPage(currentPage - 1)}
-                            >
-                                Previous
-                            </button>
-                        </li>
-
-                        {/* Page Numbers */}
-                        {Array.from(
-                            { length: totalPages },
-                            (_, index) => index + 1
-                        ).map((page) => (
+            <div className="mt-3 d-flex justify-content-center align-items-center flex-column">
+                <div className="col">
+                    <nav>
+                        <ul className="pagination">
+                            {/* Prev Button */}
                             <li
-                                key={page}
                                 className={`page-item ${
-                                    page === currentPage && "active"
+                                    currentPage === 1 && "disabled"
                                 }`}
                             >
                                 <button
                                     className="page-link"
-                                    onClick={() => goToPage(page)}
+                                    onClick={() => goToPage(currentPage - 1)}
                                 >
-                                    {page}
+                                    Previous
                                 </button>
                             </li>
-                        ))}
 
-                        {/* Next Button */}
-                        <li
-                            className={`page-item ${
-                                currentPage === totalPages && "disabled"
-                            }`}
-                        >
-                            <button
-                                className="page-link"
-                                onClick={() => goToPage(currentPage + 1)}
+                            {/* Page Numbers */}
+                            {Array.from(
+                                { length: totalPages },
+                                (_, index) => index + 1
+                            ).map((page) => (
+                                <li
+                                    key={page}
+                                    className={`page-item ${
+                                        page === currentPage && "active"
+                                    }`}
+                                >
+                                    <button
+                                        className="page-link"
+                                        onClick={() => goToPage(page)}
+                                    >
+                                        {page}
+                                    </button>
+                                </li>
+                            ))}
+
+                            {/* Next Button */}
+                            <li
+                                className={`page-item ${
+                                    currentPage === totalPages && "disabled"
+                                }`}
                             >
-                                Next
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
+                                <button
+                                    className="page-link"
+                                    onClick={() => goToPage(currentPage + 1)}
+                                >
+                                    Next
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
 
-            {/* ---------------- Modal ---------------- */}
-            {showModal && (
+            {/* ---------------- Add User Modal ---------------- */}
+            {showAddModal && (
                 <div
                     className="modal fade show"
                     style={{
@@ -213,31 +273,65 @@ const goToPage = (page) => {
                     <div className="modal-dialog">
                         <div className="modal-content bg-dark text-white">
                             <div className="modal-header">
-                                <h5 className="modal-title">Edit User</h5>
+                                <h5 className="modal-title">Add User</h5>
                                 <button
                                     className="btn-close btn-close-white"
                                     onClick={closeModal}
                                 ></button>
                             </div>
+
                             <div className="modal-body">
                                 <label className="form-label">Name</label>
                                 <input
                                     type="text"
                                     className="form-control mb-3"
-                                    value={editName}
-                                    onChange={(e) =>
-                                        setEditName(e.target.value)
-                                    }
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                    required
+                                    minLength={3}
                                 />
 
                                 <label className="form-label">Email</label>
                                 <input
                                     type="email"
-                                    className="form-control"
-                                    value={editEmail}
+                                    className="form-control mb-3"
+                                    value={newEmail}
                                     onChange={(e) =>
-                                        setEditEmail(e.target.value)
+                                        setNewEmail(e.target.value)
                                     }
+                                    required
+                                    minLength={3}
+                                    pattern="^[^@]+@[^@]+\.[^@]+$" // Email validation with @
+                                />
+
+                                <label className="form-label">Role</label>
+                                <input
+                                    type="text"
+                                    className="form-control mb-3"
+                                    value={newRole}
+                                    onChange={(e) => setNewRole(e.target.value)}
+                                    required
+                                    minLength={3}
+                                />
+                                <label className="form-label">Status</label>
+                                <input
+                                    type="text"
+                                    className="form-control mb-3"
+                                    value={newStatus}
+                                    onChange={(e) =>
+                                        setNewStatus(e.target.value)
+                                    }
+                                    required
+                                    minLength={3}
+                                />
+
+                                <label className="form-label">Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    value={newDate}
+                                    onChange={(e) => setNewDate(e.target.value)}
+                                    required
                                 />
                             </div>
 
@@ -250,7 +344,7 @@ const goToPage = (page) => {
                                 </button>
                                 <button
                                     className="btn btn-success"
-                                    onClick={saveChanges}
+                                    onClick={saveNewUser}
                                 >
                                     Save
                                 </button>
