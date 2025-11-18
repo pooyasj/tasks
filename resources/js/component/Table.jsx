@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import dataJson from "../data.json";
 import { FaTrash, FaSort, FaEdit } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
-
+import {
+    LineChart,
+    Line,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer
+} from "recharts";
 export default function Table() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
 
-    // URL Page 
+    // URL Page
     const [searchParams, setSearchParams] = useSearchParams();
     const pageFromUrl = parseInt(searchParams.get("page")) || 1;
     const [currentPage, setCurrentPage] = useState(pageFromUrl);
@@ -129,6 +137,23 @@ export default function Table() {
         setCurrentPage(page);
         setSearchParams({ page: page });
     };
+    // --------------نمودار----------------
+    // Prepare monthly signup chart
+const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+const monthlyCount = Array(12).fill(0);
+
+users.forEach(user => {
+    if (user.date) {
+        const monthIndex = new Date(user.date).getMonth();
+        monthlyCount[monthIndex] += 1;
+    }
+});
+
+const chartData = monthNames.map((m, i) => ({
+    month: m,
+    count: monthlyCount[i]
+}));
     return (
         <>
             {/* Search */}
@@ -146,7 +171,10 @@ export default function Table() {
             </div>
 
             {/* Add User Button */}
-            <button className="btn btn-primary mb-3" onClick={openAddModal}>
+            <button
+                className="btn btn-primary mb-3 col-2"
+                onClick={openAddModal}
+            >
                 Add User
             </button>
 
@@ -255,7 +283,27 @@ export default function Table() {
                     </li>
                 </ul>
             </div>
+            {/* ----------نمودار----------------- */}
+<div className="mt-5 p-4 bg-white rounded shadow mb-4">
+    <h5 className="mb-3">Users per month</h5>
 
+    <ResponsiveContainer width="100%" height={280}>
+        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="month" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
+            <Tooltip />
+            <Line
+                type="monotone"
+                dataKey="count"
+                stroke="#3b82f6"
+                strokeWidth={3}
+                dot={{ r: 4, strokeWidth: 2, fill: "#3b82f6" }}
+                activeDot={{ r: 6 }}
+            />
+        </LineChart>
+    </ResponsiveContainer>
+</div>
             {/* -------- Edit Modal -------- */}
             {showEditModal && (
                 <div
@@ -395,6 +443,7 @@ export default function Table() {
                     </div>
                 </div>
             )}
+           
         </>
     );
 }
