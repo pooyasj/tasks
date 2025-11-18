@@ -108,8 +108,7 @@ export default function Table() {
     // -------- Delete User --------
     // -------- Delete User --------
 const deleteUser = (id) => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this user?");
-    if (!isConfirmed) return;
+    
 
     setUsers(users.filter((u) => u.id !== id));
 };
@@ -126,9 +125,11 @@ const deleteUser = (id) => {
     };
 
     // -------- Filtering --------
-    const filteredUsers = users.filter((user) =>
-        user.name.toLowerCase().includes(search.toLowerCase())
-    );
+   const filteredUsers = users.filter((user) =>
+    Object.values(user).some((value) =>
+        String(value).toLowerCase().includes(search.toLowerCase())
+    )
+);
 
     // -------- Pagination Logic --------
     const indexOfLast = currentPage * usersPerPage;
@@ -161,13 +162,22 @@ const chartData = monthNames.map((m, i) => ({
 useEffect(function(){
     document.title="user management"
 },[])
+const sortByEmail = () => {
+    const sorted = [...users].sort((a, b) =>
+        sortAsc
+            ? a.email.localeCompare(b.email)
+            : b.email.localeCompare(a.email)
+    );
+    setUsers(sorted);
+    setSortAsc(!sortAsc);
+};
     return (
         <>
             {/* Search */}
             <div className="mb-3 border border-2 border-danger rounded-3 w-100">
                 <input
                     type="text"
-                    placeholder="Search by name..."
+                    placeholder="Search"
                     className="form-control"
                     value={search}
                     onChange={(e) => {
@@ -202,7 +212,16 @@ useEffect(function(){
                             </span>
                             Name
                         </th>
-                        <th>Email</th>
+                        <th>
+                            <span
+                                  onClick={sortByEmail}
+                                style={{ cursor: "pointer" }}
+                                className="bg-primary me-1 rounded-1 fs-5 p-1"
+                            >
+                                <FaSort />
+                            </span>
+                            email
+                        </th>
                         <th>Role</th>
                         <th>Status</th>
                         <th>Date</th>
@@ -224,7 +243,7 @@ useEffect(function(){
 
                             <td>
                                 <span
-                                    className="text-danger"
+                                    className="text-danger "
                                     style={{ cursor: "pointer" }}
                                     onClick={() => deleteUser(item.id)}
                                 >
