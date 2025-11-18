@@ -9,13 +9,17 @@ export default function Table() {
     // Search
     const [search, setSearch] = useState("");
 
-    // حالت مدال
+    // Pagination 
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
+
+    // Modal
     const [showModal, setShowModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
 
-    // ---- بازکردن مدال ----
+    // ---- open modal ----
     const openModal = (user) => {
         setEditUser(user);
         setEditName(user.name);
@@ -23,13 +27,13 @@ export default function Table() {
         setShowModal(true);
     };
 
-    // ---- بستن مدال ----
+    // ---- close modal ----
     const closeModal = () => {
         setShowModal(false);
         setEditUser(null);
     };
 
-    // ---- ذخیره تغییرات ----
+    // ---- save changes ----
     const saveChanges = () => {
         const updated = users.map((item) =>
             item.id === editUser.id
@@ -40,12 +44,12 @@ export default function Table() {
         closeModal();
     };
 
-    // ----  حذف ----
+    // ---- delete ----
     const deleteUser = (id) => {
         setUsers(users.filter((item) => item.id !== id));
     };
 
-    // ---- sort  ----
+    // ---- sort ----
     const sortByName = () => {
         const sorted = [...users].sort((a, b) =>
             sortAsc
@@ -61,16 +65,30 @@ export default function Table() {
         user.name.toLowerCase().includes(search.toLowerCase())
     );
 
+    // ---------------- Pagination  ----------------
+    const indexOfLast = currentPage * usersPerPage;
+    const indexOfFirst = indexOfLast - usersPerPage;
+    const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
+
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+    const goToPage = (page) => {
+        setCurrentPage(page);
+    };
+
     return (
         <>
-            {/* Search  */}
+            {/* Search */}
             <div className="mb-3 border border-2 border-danger rounded-3">
                 <input
                     type="text"
                     placeholder="Search by name..."
                     className="form-control"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1); 
+                    }}
                 />
             </div>
 
@@ -98,7 +116,7 @@ export default function Table() {
                 </thead>
 
                 <tbody>
-                    {filteredUsers.map((item) => (
+                    {currentUsers.map((item) => (
                         <tr key={item.id}>
                             <td>
                                 <span
@@ -119,6 +137,7 @@ export default function Table() {
                                     <FaTrash />
                                 </span>
                             </td>
+
                             <td>{item.id}</td>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
@@ -129,6 +148,61 @@ export default function Table() {
                     ))}
                 </tbody>
             </table>
+
+            {/* ---------------- Pagination ---------------- */}
+            <div className="mt-3 d-flex justify-content-center">
+                <nav>
+                    <ul className="pagination">
+                        {/* Prev Button */}
+                        <li
+                            className={`page-item ${
+                                currentPage === 1 && "disabled"
+                            }`}
+                        >
+                            <button
+                                className="page-link"
+                                onClick={() => goToPage(currentPage - 1)}
+                            >
+                                Previous
+                            </button>
+                        </li>
+
+                        {/* Page Numbers */}
+                        {Array.from(
+                            { length: totalPages },
+                            (_, index) => index + 1
+                        ).map((page) => (
+                            <li
+                                key={page}
+                                className={`page-item ${
+                                    page === currentPage && "active"
+                                }`}
+                            >
+                                <button
+                                    className="page-link"
+                                    onClick={() => goToPage(page)}
+                                >
+                                    {page}
+                                </button>
+                            </li>
+                        ))}
+
+                        {/* Next Button */}
+                        <li
+                            className={`page-item ${
+                                currentPage === totalPages && "disabled"
+                            }`}
+                        >
+                            <button
+                                className="page-link"
+                                onClick={() => goToPage(currentPage + 1)}
+                            >
+                                Next
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
             {/* ---------------- Modal ---------------- */}
             {showModal && (
@@ -148,7 +222,6 @@ export default function Table() {
                                     onClick={closeModal}
                                 ></button>
                             </div>
-
                             <div className="modal-body">
                                 <label className="form-label">Name</label>
                                 <input
