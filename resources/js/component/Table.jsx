@@ -6,6 +6,8 @@ import { useSearchParams } from "react-router-dom";
 export default function Table() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
+
+    // URL Page 
     const [searchParams, setSearchParams] = useSearchParams();
     const pageFromUrl = parseInt(searchParams.get("page")) || 1;
     const [currentPage, setCurrentPage] = useState(pageFromUrl);
@@ -16,13 +18,13 @@ export default function Table() {
     // Pagination
     const usersPerPage = 10;
 
-    // Modal for Edit
-    const [showModal, setShowModal] = useState(false);
+    // -------- Edit Modal State --------
+    const [showEditModal, setShowEditModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
 
-    // Modal for Add User
+    // -------- Add User Modal State --------
     const [showAddModal, setShowAddModal] = useState(false);
     const [newName, setNewName] = useState("");
     const [newEmail, setNewEmail] = useState("");
@@ -30,27 +32,20 @@ export default function Table() {
     const [newStatus, setNewStatus] = useState("");
     const [newDate, setNewDate] = useState("");
 
-    // ---- open modal for editing ----
-    const openModal = (user) => {
+    // -------- Open Edit Modal --------
+    const openEditModal = (user) => {
         setEditUser(user);
         setEditName(user.name);
         setEditEmail(user.email);
-        setShowModal(true);
+        setShowEditModal(true);
     };
 
-    // ---- open modal for adding user ----
-    const openAddModal = () => {
-        setShowAddModal(true);
-    };
-
-    // ---- close modal ----
-    const closeModal = () => {
-        setShowModal(false);
-        setShowAddModal(false);
+    const closeEditModal = () => {
+        setShowEditModal(false);
         setEditUser(null);
     };
 
-    // ---- save changes (edit) ----
+    // -------- Save Edit --------
     const saveChanges = () => {
         const updated = users.map((item) =>
             item.id === editUser.id
@@ -58,10 +53,19 @@ export default function Table() {
                 : item
         );
         setUsers(updated);
-        closeModal();
+        closeEditModal();
     };
 
-    // ---- save new user ----
+    // -------- Open Add User Modal --------
+    const openAddModal = () => {
+        setShowAddModal(true);
+    };
+
+    const closeAddModal = () => {
+        setShowAddModal(false);
+    };
+
+    // -------- Save New User --------
     const saveNewUser = () => {
         if (
             newName.length < 3 ||
@@ -70,34 +74,35 @@ export default function Table() {
             newStatus.length < 3 ||
             !newDate
         ) {
-            alert("Please fill out all fields with at least 3 characters.");
+            alert("Please fill all fields correctly (min 3 chars).");
             return;
         }
 
         const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
         if (!emailRegex.test(newEmail)) {
-            alert("Please enter a valid email.");
+            alert("Invalid Email!");
             return;
         }
 
         const newUser = {
-            id: users.length + 1, // Automatically assign new ID
+            id: users.length + 1,
             name: newName,
             email: newEmail,
             role: newRole,
             status: newStatus,
             date: newDate,
         };
+
         setUsers([...users, newUser]);
-        closeModal();
+        closeAddModal();
     };
 
-    // ---- delete ----
+    // -------- Delete User --------
     const deleteUser = (id) => {
-        setUsers(users.filter((item) => item.id !== id));
+        setUsers(users.filter((u) => u.id !== id));
     };
 
-    // ---- sort ----
+    // -------- Sort --------
     const sortByName = () => {
         const sorted = [...users].sort((a, b) =>
             sortAsc
@@ -108,24 +113,22 @@ export default function Table() {
         setSortAsc(!sortAsc);
     };
 
-    // ---- filter ----
+    // -------- Filtering --------
     const filteredUsers = users.filter((user) =>
         user.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    // ---------------- Pagination ----------------
+    // -------- Pagination Logic --------
     const indexOfLast = currentPage * usersPerPage;
     const indexOfFirst = indexOfLast - usersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-    //   --------------------change url----------------
     const goToPage = (page) => {
         setCurrentPage(page);
         setSearchParams({ page: page });
     };
-
     return (
         <>
             {/* Search */}
@@ -143,30 +146,31 @@ export default function Table() {
             </div>
 
             {/* Add User Button */}
-            <div className="col btn btn-primary mb-3" onClick={openAddModal}>
+            <button className="btn btn-primary mb-3" onClick={openAddModal}>
                 Add User
-            </div>
+            </button>
 
-            <table className="table mb-0 table-dark table-striped">
+            {/* Table */}
+            <table className="table table-dark table-striped">
                 <thead>
                     <tr>
                         <th>Edit</th>
                         <th>Delete</th>
-                        <th>id</th>
+                        <th>ID</th>
                         <th>
                             <span
-                                className="bg-primary me-1 rounded-1 fs-5 p-1"
-                                style={{ cursor: "pointer" }}
                                 onClick={sortByName}
+                                style={{ cursor: "pointer" }}
+                                className="bg-primary me-1 rounded-1 fs-5 p-1"
                             >
                                 <FaSort />
                             </span>
-                            name
+                            Name
                         </th>
-                        <th>email</th>
-                        <th>role</th>
-                        <th>status</th>
-                        <th>date</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
 
@@ -177,7 +181,7 @@ export default function Table() {
                                 <span
                                     className="text-info fs-5"
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => openModal(item)}
+                                    onClick={() => openEditModal(item)}
                                 >
                                     <FaEdit />
                                 </span>
@@ -204,141 +208,179 @@ export default function Table() {
                 </tbody>
             </table>
 
-            {/* ---------------- Pagination ---------------- */}
-            <div className="mt-3 d-flex justify-content-center align-items-center flex-column">
-                <div className="col">
-                    <nav>
-                        <ul className="pagination">
-                            {/* Prev Button */}
+            {/* Pagination */}
+            <div className="mt-3 d-flex justify-content-center">
+                <ul className="pagination">
+                    <li
+                        className={`page-item ${
+                            currentPage === 1 && "disabled"
+                        }`}
+                    >
+                        <button
+                            className="page-link"
+                            onClick={() => goToPage(currentPage - 1)}
+                        >
+                            Previous
+                        </button>
+                    </li>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (page) => (
                             <li
+                                key={page}
                                 className={`page-item ${
-                                    currentPage === 1 && "disabled"
+                                    page === currentPage && "active"
                                 }`}
                             >
                                 <button
                                     className="page-link"
-                                    onClick={() => goToPage(currentPage - 1)}
+                                    onClick={() => goToPage(page)}
                                 >
-                                    Previous
+                                    {page}
                                 </button>
                             </li>
-
-                            {/* Page Numbers */}
-                            {Array.from(
-                                { length: totalPages },
-                                (_, index) => index + 1
-                            ).map((page) => (
-                                <li
-                                    key={page}
-                                    className={`page-item ${
-                                        page === currentPage && "active"
-                                    }`}
-                                >
-                                    <button
-                                        className="page-link"
-                                        onClick={() => goToPage(page)}
-                                    >
-                                        {page}
-                                    </button>
-                                </li>
-                            ))}
-
-                            {/* Next Button */}
-                            <li
-                                className={`page-item ${
-                                    currentPage === totalPages && "disabled"
-                                }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => goToPage(currentPage + 1)}
-                                >
-                                    Next
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                        )
+                    )}
+                    <li
+                        className={`page-item ${
+                            currentPage === totalPages && "disabled"
+                        }`}
+                    >
+                        <button
+                            className="page-link"
+                            onClick={() => goToPage(currentPage + 1)}
+                        >
+                            Next
+                        </button>
+                    </li>
+                </ul>
             </div>
 
-            {/* ---------------- Add User Modal ---------------- */}
-            {showAddModal && (
+            {/* -------- Edit Modal -------- */}
+            {showEditModal && (
                 <div
                     className="modal fade show"
-                    style={{
-                        display: "block",
-                        background: "rgba(0,0,0,0.6)",
-                    }}
+                    style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
                 >
                     <div className="modal-dialog">
                         <div className="modal-content bg-dark text-white">
                             <div className="modal-header">
-                                <h5 className="modal-title">Add User</h5>
+                                <h5>Edit User</h5>
                                 <button
                                     className="btn-close btn-close-white"
-                                    onClick={closeModal}
+                                    onClick={closeEditModal}
                                 ></button>
                             </div>
 
                             <div className="modal-body">
-                                <label className="form-label">Name</label>
+                                <label>Name</label>
                                 <input
-                                    type="text"
-                                    className="form-control mb-3"
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
-                                    required
-                                    minLength={3}
-                                />
-
-                                <label className="form-label">Email</label>
-                                <input
-                                    type="email"
-                                    className="form-control mb-3"
-                                    value={newEmail}
+                                    className="form-control mb-2"
+                                    value={editName}
                                     onChange={(e) =>
-                                        setNewEmail(e.target.value)
+                                        setEditName(e.target.value)
                                     }
-                                    required
-                                    minLength={3}
-                                    pattern="^[^@]+@[^@]+\.[^@]+$" // Email validation with @
                                 />
 
-                                <label className="form-label">Role</label>
+                                <label>Email</label>
                                 <input
-                                    type="text"
-                                    className="form-control mb-3"
-                                    value={newRole}
-                                    onChange={(e) => setNewRole(e.target.value)}
-                                    required
-                                    minLength={3}
-                                />
-                                <label className="form-label">Status</label>
-                                <input
-                                    type="text"
-                                    className="form-control mb-3"
-                                    value={newStatus}
-                                    onChange={(e) =>
-                                        setNewStatus(e.target.value)
-                                    }
-                                    required
-                                    minLength={3}
-                                />
-
-                                <label className="form-label">Date</label>
-                                <input
-                                    type="date"
                                     className="form-control"
-                                    value={newDate}
-                                    onChange={(e) => setNewDate(e.target.value)}
-                                    required
+                                    value={editEmail}
+                                    onChange={(e) =>
+                                        setEditEmail(e.target.value)
+                                    }
                                 />
                             </div>
 
                             <div className="modal-footer">
                                 <button
                                     className="btn btn-secondary"
-                                    onClick={closeModal}
+                                    onClick={closeEditModal}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="btn btn-success"
+                                    onClick={saveChanges}
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* -------- Add User Modal -------- */}
+            {showAddModal && (
+                <div
+                    className="modal fade show"
+                    style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
+                >
+                    <div className="modal-dialog">
+                        <div className="modal-content bg-dark text-white">
+                            <div className="modal-header">
+                                <h5>Add User</h5>
+                                <button
+                                    className="btn-close btn-close-white"
+                                    onClick={closeAddModal}
+                                ></button>
+                            </div>
+
+                            <div className="modal-body">
+                                <label>Name</label>
+                                <input
+                                    className="form-control mb-2"
+                                    minLength={3}
+                                    required
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                />
+
+                                <label>Email</label>
+                                <input
+                                    className="form-control mb-2"
+                                    type="email"
+                                    required
+                                    value={newEmail}
+                                    onChange={(e) =>
+                                        setNewEmail(e.target.value)
+                                    }
+                                />
+
+                                <label>Role</label>
+                                <input
+                                    className="form-control mb-2"
+                                    minLength={3}
+                                    required
+                                    value={newRole}
+                                    onChange={(e) => setNewRole(e.target.value)}
+                                />
+                                <label>Status</label>
+                                <input
+                                    className="form-control mb-2"
+                                    minLength={3}
+                                    required
+                                    value={newStatus}
+                                    onChange={(e) =>
+                                        setNewStatus(e.target.value)
+                                    }
+                                />
+
+                                <label>Date</label>
+                                <input
+                                    className="form-control"
+                                    type="date"
+                                    required
+                                    value={newDate}
+                                    onChange={(e) => setNewDate(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="modal-footer">
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={closeAddModal}
                                 >
                                     Cancel
                                 </button>
