@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import dataJson from "../data.json";
 import { FaTrash, FaSort, FaEdit } from "react-icons/fa";
-
+import { useSearchParams } from "react-router-dom";
 export default function Table() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const pageFromUrl = parseInt(searchParams.get("page")) || 1;
+    const [currentPage, setCurrentPage] = useState(pageFromUrl);
     // Search
     const [search, setSearch] = useState("");
-
-    // Pagination 
-    const [currentPage, setCurrentPage] = useState(1);
+    // Pagination
     const usersPerPage = 10;
-
     // Modal
     const [showModal, setShowModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
-
     // ---- open modal ----
     const openModal = (user) => {
         setEditUser(user);
@@ -26,13 +24,11 @@ export default function Table() {
         setEditEmail(user.email);
         setShowModal(true);
     };
-
     // ---- close modal ----
     const closeModal = () => {
         setShowModal(false);
         setEditUser(null);
     };
-
     // ---- save changes ----
     const saveChanges = () => {
         const updated = users.map((item) =>
@@ -72,10 +68,11 @@ export default function Table() {
 
     const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
-    const goToPage = (page) => {
-        setCurrentPage(page);
-    };
-
+//   --------------------change url----------------
+const goToPage = (page) => {
+    setCurrentPage(page);
+    setSearchParams({ page: page });
+};
     return (
         <>
             {/* Search */}
@@ -87,7 +84,7 @@ export default function Table() {
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
-                        setCurrentPage(1); 
+                        setCurrentPage(1);
                     }}
                 />
             </div>
