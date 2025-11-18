@@ -11,28 +11,24 @@ import {
     Tooltip,
     ResponsiveContainer
 } from "recharts";
+
 export default function Table() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
 
-    // URL Page
     const [searchParams, setSearchParams] = useSearchParams();
     const pageFromUrl = parseInt(searchParams.get("page")) || 1;
     const [currentPage, setCurrentPage] = useState(pageFromUrl);
 
-    // Search
     const [search, setSearch] = useState("");
 
-    // Pagination
     const usersPerPage = 10;
 
-    // -------- Edit Modal State --------
     const [showEditModal, setShowEditModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
 
-    // -------- Add User Modal State --------
     const [showAddModal, setShowAddModal] = useState(false);
     const [newName, setNewName] = useState("");
     const [newEmail, setNewEmail] = useState("");
@@ -40,7 +36,9 @@ export default function Table() {
     const [newStatus, setNewStatus] = useState("");
     const [newDate, setNewDate] = useState("");
 
-    // -------- Open Edit Modal --------
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
+
     const openEditModal = (user) => {
         setEditUser(user);
         setEditName(user.name);
@@ -53,7 +51,6 @@ export default function Table() {
         setEditUser(null);
     };
 
-    // -------- Save Edit --------
     const saveChanges = () => {
         const updated = users.map((item) =>
             item.id === editUser.id
@@ -64,28 +61,10 @@ export default function Table() {
         closeEditModal();
     };
 
-    // -------- Open Add User Modal --------
-    const openAddModal = () => {
-        setShowAddModal(true);
-    };
+    const openAddModal = () => setShowAddModal(true);
+    const closeAddModal = () => setShowAddModal(false);
 
-    const closeAddModal = () => {
-        setShowAddModal(false);
-    };
-
-    // -------- Save New User --------
     const saveNewUser = () => {
-        if (
-            newName.length < 3 ||
-            newEmail.length < 3 ||
-            newRole.length < 3 ||
-            newStatus.length < 3 ||
-            !newDate
-        ) {
-            alert("Please fill all fields correctly (min 3 chars).");
-            return;
-        }
-
         const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
         if (!emailRegex.test(newEmail)) {
             alert("Invalid Email!");
@@ -105,28 +84,28 @@ export default function Table() {
         closeAddModal();
     };
 
-    // -------- Delete User --------
-    const deleteUser = (id) => {
-        setUsers(users.filter((u) => u.id !== id));
+    const openDeleteModal = (user) => {
+        setUserToDelete(user);
+        setShowDeleteModal(true);
     };
 
-    // -------- Sort --------
+    const confirmDelete = () => {
+        setUsers(users.filter((u) => u.id !== userToDelete.id));
+        setShowDeleteModal(false);
+    };
+
     const sortByName = () => {
         const sorted = [...users].sort((a, b) =>
-            sortAsc
-                ? a.name.localeCompare(b.name)
-                : b.name.localeCompare(a.name)
+            sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
         );
         setUsers(sorted);
         setSortAsc(!sortAsc);
     };
 
-    // -------- Filtering --------
     const filteredUsers = users.filter((user) =>
         user.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    // -------- Pagination Logic --------
     const indexOfLast = currentPage * usersPerPage;
     const indexOfFirst = indexOfLast - usersPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
@@ -137,29 +116,28 @@ export default function Table() {
         setCurrentPage(page);
         setSearchParams({ page: page });
     };
-    // --------------نمودار----------------
-    // Prepare monthly signup chart
-const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-const monthlyCount = Array(12).fill(0);
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthlyCount = Array(12).fill(0);
 
-users.forEach(user => {
-    if (user.date) {
-        const monthIndex = new Date(user.date).getMonth();
-        monthlyCount[monthIndex] += 1;
-    }
-});
+    users.forEach(user => {
+        if (user.date) {
+            const monthIndex = new Date(user.date).getMonth();
+            monthlyCount[monthIndex] += 1;
+        }
+    });
 
-const chartData = monthNames.map((m, i) => ({
-    month: m,
-    count: monthlyCount[i]
-}));
-useEffect(function(){
-    document.title="user management"
-},[])
+    const chartData = monthNames.map((m, i) => ({
+        month: m,
+        count: monthlyCount[i]
+    }));
+
+    useEffect(() => {
+        document.title = "user management";
+    }, []);
+
     return (
         <>
-            {/* Search */}
             <div className="mb-3 border border-2 border-danger rounded-3">
                 <input
                     type="text"
@@ -173,15 +151,10 @@ useEffect(function(){
                 />
             </div>
 
-            {/* Add User Button */}
-            <button
-                className="btn btn-primary mb-3 col-2"
-                onClick={openAddModal}
-            >
+            <button className="btn btn-primary mb-3 col-2" onClick={openAddModal}>
                 Add User
             </button>
 
-            {/* Table */}
             <table className="table table-dark table-striped">
                 <thead>
                     <tr>
@@ -222,7 +195,7 @@ useEffect(function(){
                                 <span
                                     className="text-danger"
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => deleteUser(item.id)}
+                                    onClick={() => openDeleteModal(item)}
                                 >
                                     <FaTrash />
                                 </span>
@@ -239,214 +212,58 @@ useEffect(function(){
                 </tbody>
             </table>
 
-            {/* Pagination */}
             <div className="mt-3 d-flex justify-content-center">
                 <ul className="pagination">
-                    <li
-                        className={`page-item ${
-                            currentPage === 1 && "disabled"
-                        }`}
-                    >
-                        <button
-                            className="page-link"
-                            onClick={() => goToPage(currentPage - 1)}
-                        >
+                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                        <button className="page-link" onClick={() => goToPage(currentPage - 1)}>
                             Previous
                         </button>
                     </li>
 
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) => (
-                            <li
-                                key={page}
-                                className={`page-item ${
-                                    page === currentPage && "active"
-                                }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => goToPage(page)}
-                                >
-                                    {page}
-                                </button>
-                            </li>
-                        )
-                    )}
-                    <li
-                        className={`page-item ${
-                            currentPage === totalPages && "disabled"
-                        }`}
-                    >
-                        <button
-                            className="page-link"
-                            onClick={() => goToPage(currentPage + 1)}
-                        >
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <li key={page} className={`page-item ${page === currentPage ? "active" : ""}`}>
+                            <button className="page-link" onClick={() => goToPage(page)}>
+                                {page}
+                            </button>
+                        </li>
+                    ))}
+
+                    <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                        <button className="page-link" onClick={() => goToPage(currentPage + 1)}>
                             Next
                         </button>
                     </li>
                 </ul>
             </div>
-            {/* ----------نمودار----------------- */}
-<div className="mt-5 p-4 bg-white rounded shadow mb-4">
-    <h5 className="mb-3">Users per month</h5>
 
-    <ResponsiveContainer width="100%" height={280}>
-        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="month" stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
-            <Tooltip />
-            <Line
-                type="monotone"
-                dataKey="count"
-                stroke="#3b82f6"
-                strokeWidth={3}
-                dot={{ r: 4, strokeWidth: 2, fill: "#3b82f6" }}
-                activeDot={{ r: 6 }}
-            />
-        </LineChart>
-    </ResponsiveContainer>
-</div>
-            {/* -------- Edit Modal -------- */}
-            {showEditModal && (
-                <div
-                    className="modal fade show"
-                    style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
-                >
+            {showDeleteModal && (
+                <div className="modal fade show" style={{ display: "block", background: "rgba(0,0,0,0.7)" }}>
                     <div className="modal-dialog">
                         <div className="modal-content bg-dark text-white">
                             <div className="modal-header">
-                                <h5>Edit User</h5>
-                                <button
-                                    className="btn-close btn-close-white"
-                                    onClick={closeEditModal}
-                                ></button>
+                                <h5>Delete User</h5>
+                                <button className="btn-close btn-close-white" onClick={() => setShowDeleteModal(false)}></button>
                             </div>
 
                             <div className="modal-body">
-                                <label>Name</label>
-                                <input
-                                    className="form-control mb-2"
-                                    value={editName}
-                                    onChange={(e) =>
-                                        setEditName(e.target.value)
-                                    }
-                                />
-
-                                <label>Email</label>
-                                <input
-                                    className="form-control"
-                                    value={editEmail}
-                                    onChange={(e) =>
-                                        setEditEmail(e.target.value)
-                                    }
-                                />
+                                <p>
+                                    Are you sure you want to delete
+                                    <strong className="text-danger"> {userToDelete?.name} </strong>?
+                                </p>
                             </div>
 
                             <div className="modal-footer">
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={closeEditModal}
-                                >
+                                <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
                                     Cancel
                                 </button>
-                                <button
-                                    className="btn btn-success"
-                                    onClick={saveChanges}
-                                >
-                                    Save
+                                <button className="btn btn-danger" onClick={confirmDelete}>
+                                    Delete
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-
-            {/* -------- Add User Modal -------- */}
-            {showAddModal && (
-                <div
-                    className="modal fade show"
-                    style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
-                >
-                    <div className="modal-dialog">
-                        <div className="modal-content bg-dark text-white">
-                            <div className="modal-header">
-                                <h5>Add User</h5>
-                                <button
-                                    className="btn-close btn-close-white"
-                                    onClick={closeAddModal}
-                                ></button>
-                            </div>
-
-                            <div className="modal-body">
-                                <label>Name</label>
-                                <input
-                                    className="form-control mb-2"
-                                    minLength={3}
-                                    required
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
-                                />
-
-                                <label>Email</label>
-                                <input
-                                    className="form-control mb-2"
-                                    type="email"
-                                    required
-                                    value={newEmail}
-                                    onChange={(e) =>
-                                        setNewEmail(e.target.value)
-                                    }
-                                />
-
-                                <label>Role</label>
-                                <input
-                                    className="form-control mb-2"
-                                    minLength={3}
-                                    required
-                                    value={newRole}
-                                    onChange={(e) => setNewRole(e.target.value)}
-                                />
-                                <label>Status</label>
-                                <input
-                                    className="form-control mb-2"
-                                    minLength={3}
-                                    required
-                                    value={newStatus}
-                                    onChange={(e) =>
-                                        setNewStatus(e.target.value)
-                                    }
-                                />
-
-                                <label>Date</label>
-                                <input
-                                    className="form-control"
-                                    type="date"
-                                    required
-                                    value={newDate}
-                                    onChange={(e) => setNewDate(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="modal-footer">
-                                <button
-                                    className="btn btn-secondary"
-                                    onClick={closeAddModal}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    className="btn btn-success"
-                                    onClick={saveNewUser}
-                                >
-                                    Save
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-           
         </>
     );
 }
