@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dataJson from "../data.json";
 import { FaTrash, FaSort, FaEdit } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
@@ -154,6 +154,9 @@ const chartData = monthNames.map((m, i) => ({
     month: m,
     count: monthlyCount[i]
 }));
+useEffect(function(){
+    document.title="user management"
+},[])
     return (
         <>
             {/* Search */}
