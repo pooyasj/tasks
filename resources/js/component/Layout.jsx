@@ -6,8 +6,10 @@ export default function Layout() {
         <>
             <div className="container-fluid">
                 <div className="row justify-content-center align-items-center mt-3">
-                    <div className="col-10  text-center row flex-column">
-                        <div className="col"><Table/></div>
+                    <div className="col-10  text-center row flex-column justify-center align-items-center">
+                        <div className="col">
+                            <Table />
+                        </div>
                         <div className="col">2</div>
                         <div className="col">3</div>
                         <div className="col">4</div>

@@ -6,13 +6,16 @@ export default function Table() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
 
+    // Search
+    const [search, setSearch] = useState("");
+
     // حالت مدال
     const [showModal, setShowModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
 
-    // ---- باز کردن مدال ----
+    // ---- بازکردن مدال ----
     const openModal = (user) => {
         setEditUser(user);
         setEditName(user.name);
@@ -37,12 +40,12 @@ export default function Table() {
         closeModal();
     };
 
-    // ---- حذف ----
+    // ----  حذف ----
     const deleteUser = (id) => {
         setUsers(users.filter((item) => item.id !== id));
     };
 
-    // ---- Sort ----
+    // ---- sort  ----
     const sortByName = () => {
         const sorted = [...users].sort((a, b) =>
             sortAsc
@@ -53,8 +56,24 @@ export default function Table() {
         setSortAsc(!sortAsc);
     };
 
+    // ---- filter ----
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
         <>
+            {/* Search  */}
+            <div className="mb-3 border border-2 border-danger rounded-3">
+                <input
+                    type="text"
+                    placeholder="Search by name..."
+                    className="form-control"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+            </div>
+
             <table className="table mb-0 table-dark table-striped">
                 <thead>
                     <tr>
@@ -79,7 +98,7 @@ export default function Table() {
                 </thead>
 
                 <tbody>
-                    {users.map((item) => (
+                    {filteredUsers.map((item) => (
                         <tr key={item.id}>
                             <td>
                                 <span
@@ -100,7 +119,6 @@ export default function Table() {
                                     <FaTrash />
                                 </span>
                             </td>
-
                             <td>{item.id}</td>
                             <td>{item.name}</td>
                             <td>{item.email}</td>
