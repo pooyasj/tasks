@@ -52,6 +52,10 @@ export default function Table() {
         setShowEditModal(false);
         setEditUser(null);
     };
+    // ------------open delete modal--------
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+        const [userToDelete, setUserToDelete] = useState(null);
+    
 
     // -------- Save Edit --------
     const saveChanges = () => {
@@ -195,6 +199,10 @@ export default function Table() {
                 return "";
         }
     };
+      const confirmDelete = () => {
+        deleteUser(userToDelete.id);
+        setShowDeleteModal(false);
+    };
     return (
         <>
             {/* Search */}
@@ -267,9 +275,12 @@ export default function Table() {
                                 </td>
                                 <td>
                                     <span
-                                        className="text-danger "
+                                        className="text-danger"
                                         style={{ cursor: "pointer" }}
-                                        onClick={() => deleteUser(item.id)}
+                                        onClick={() => {
+                                            setUserToDelete(item);
+                                            setShowDeleteModal(true);
+                                        }}
                                     >
                                         <FaTrash />
                                     </span>
@@ -366,7 +377,7 @@ export default function Table() {
             {/* -------- Edit Modal -------- */}
             {showEditModal && (
                 <div
-                    className="modal fade show"
+                    className="modal fade show z-1"
                     style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
                 >
                     <div className="modal-dialog">
@@ -421,7 +432,7 @@ export default function Table() {
             {/* -------- Add User Modal -------- */}
             {showAddModal && (
                 <div
-                    className="modal fade show"
+                    className="modal fade show z-2"
                     style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
                 >
                     <div className="modal-dialog">
@@ -496,6 +507,45 @@ export default function Table() {
                                     onClick={saveNewUser}
                                 >
                                     Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+                   {showDeleteModal && (
+                <div
+                    className="modal fade show z-3"
+                    style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
+                >
+                    <div className="modal-dialog">
+                        <div className="modal-content bg-dark text-white">
+                            <div className="modal-header">
+                                <h5>Delete User</h5>
+                                <button
+                                    className="btn-close btn-close-white"
+                                    onClick={() => setShowDeleteModal(false)}
+                                ></button>
+                            </div>
+
+                            <div className="modal-body">
+                                Are you sure you want to delete
+                                <strong> {userToDelete?.name}</strong>?
+                            </div>
+
+                            <div className="modal-footer">
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowDeleteModal(false)}
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={confirmDelete}
+                                >
+                                    Delete
                                 </button>
                             </div>
                         </div>
