@@ -351,7 +351,7 @@ export default function Table() {
                 </ul>
             </div>
             {/* ----------نمودار----------------- */}
-            <div className="mt-5 p-4 bg-dark  rounded shadow mb-4 col">
+            <div className="mt-5 p-4 bg-whi  rounded shadow mb-4 col">
                 <h5 className="mb-3">Users per month</h5>
 
                 <ResponsiveContainer width="100%" height={280}>
@@ -360,13 +360,13 @@ export default function Table() {
                         margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" stroke="#615f5fff" />
-                        <XAxis dataKey="month" stroke="#53c8ffff" />
-                        <YAxis stroke="#5ebcf3ff" />
+                        <XAxis dataKey="month" stroke="#0b0c0cff" />
+                        <YAxis stroke="#131414ff" />
                         <Tooltip />
                         <Line
                             type="monotone"
                             dataKey="count"
-                            stroke="#25ccd8ff"
+                            stroke="#5cbbccff"
                             strokeWidth={3}
                             dot={{ r: 4, strokeWidth: 2, fill: "#d81a1aff" }}
                             activeDot={{ r: 6 }}
