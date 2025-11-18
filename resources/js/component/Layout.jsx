@@ -1,6 +1,5 @@
 import React from "react";
 import Table from "./Table";
-
 export default function Layout() {
     return (
         <>
@@ -10,9 +9,7 @@ export default function Layout() {
                         <div className="col">
                             <Table />
                         </div>
-                        <div className="col"></div>
-                        <div className="col"></div>
-                        <div className="col"></div>
+                       
                     </div>
                 </div>
             </div>

@@ -206,7 +206,7 @@ export default function Table() {
     return (
         <>
             {/* Search */}
-            <div className="mb-3 border border-2 border-danger rounded-3 w-100">
+            <div className="mb-3 border border-2 border-dark rounded-3 w-100">
                 <input
                     type="text"
                     placeholder="Search"
@@ -221,7 +221,7 @@ export default function Table() {
 
             {/* Add User Button */}
             <button
-                className="btn btn-primary mb-3 col-12 col-md-2"
+                className="btn btn-primary mb-3 col-12 col-md-2 style3"
                 onClick={openAddModal}
             >
                 Add User
@@ -266,7 +266,7 @@ export default function Table() {
                             <tr key={item.id}>
                                 <td>
                                     <span
-                                        className="text-info fs-5"
+                                        className="text-info fs-5 style2"
                                         style={{ cursor: "pointer" }}
                                         onClick={() => openEditModal(item)}
                                     >
@@ -275,7 +275,7 @@ export default function Table() {
                                 </td>
                                 <td>
                                     <span
-                                        className="text-danger"
+                                        className="text-danger style1"
                                         style={{ cursor: "pointer" }}
                                         onClick={() => {
                                             setUserToDelete(item);
@@ -351,7 +351,7 @@ export default function Table() {
                 </ul>
             </div>
             {/* ----------نمودار----------------- */}
-            <div className="mt-5 p-4 bg-white rounded shadow mb-4">
+            <div className="mt-5 p-4 bg-dark  rounded shadow mb-4 col">
                 <h5 className="mb-3">Users per month</h5>
 
                 <ResponsiveContainer width="100%" height={280}>
@@ -359,16 +359,16 @@ export default function Table() {
                         data={chartData}
                         margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <XAxis dataKey="month" stroke="#6b7280" />
-                        <YAxis stroke="#6b7280" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#615f5fff" />
+                        <XAxis dataKey="month" stroke="#53c8ffff" />
+                        <YAxis stroke="#5ebcf3ff" />
                         <Tooltip />
                         <Line
                             type="monotone"
                             dataKey="count"
-                            stroke="#3b82f6"
+                            stroke="#25ccd8ff"
                             strokeWidth={3}
-                            dot={{ r: 4, strokeWidth: 2, fill: "#3b82f6" }}
+                            dot={{ r: 4, strokeWidth: 2, fill: "#d81a1aff" }}
                             activeDot={{ r: 6 }}
                         />
                     </LineChart>
