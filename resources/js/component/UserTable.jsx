@@ -11,7 +11,7 @@ export default function UsersTable({
 }) {
     return (
         <div className="table-responsive">
-            <table className="table table-dark table-striped">
+            <table className="table table-dark table-striped" dir="rtl">
                 <thead>
                     <tr>
                         <th>Edit</th>

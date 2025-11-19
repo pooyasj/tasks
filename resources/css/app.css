@@ -21,3 +21,40 @@
     display: inline-block !important;
     transition: all 0.5s;
 }
+/* حالت موبایل */
+@media (max-width: 768px) {
+
+    .table-responsive {
+        direction: rtl;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        border-radius: 12px;
+        padding-bottom: 8px;
+    }
+
+    .table-responsive table {
+        direction: ltr;
+        min-width: 650px;  
+    }
+
+    
+    .table td, .table th {
+        padding: 10px 6px !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap;
+    }
+
+    /* آیکون‌های بزرگ‌تر  */
+    .table td span {
+        font-size: 20px !important;
+    }
+
+    /* عنوان جدول  */
+    .table th {
+        background: #1f1f1f !important;
+        color: #fff !important;
+        text-align: center;
+    }
+
+}
