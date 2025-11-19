@@ -30,6 +30,7 @@ export default function Table() {
     const [showEditModal, setShowEditModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
     const [editName, setEditName] = useState("");
+    const [editStatus, setEditStatus] = useState("");
     const [editEmail, setEditEmail] = useState("");
 
     // -------- Add User Modal State --------
@@ -45,6 +46,7 @@ export default function Table() {
         setEditUser(user);
         setEditName(user.name);
         setEditEmail(user.email);
+        setEditStatus(user.status);
         setShowEditModal(true);
     };
 
@@ -54,14 +56,18 @@ export default function Table() {
     };
     // ------------open delete modal--------
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-        const [userToDelete, setUserToDelete] = useState(null);
-    
+    const [userToDelete, setUserToDelete] = useState(null);
 
     // -------- Save Edit --------
     const saveChanges = () => {
         const updated = users.map((item) =>
             item.id === editUser.id
-                ? { ...item, name: editName, email: editEmail }
+                ? {
+                      ...item,
+                      name: editName,
+                      email: editEmail,
+                      status: editStatus,
+                  }
                 : item
         );
         setUsers(updated);
@@ -199,7 +205,7 @@ export default function Table() {
                 return "";
         }
     };
-      const confirmDelete = () => {
+    const confirmDelete = () => {
         deleteUser(userToDelete.id);
         setShowDeleteModal(false);
     };
@@ -359,7 +365,10 @@ export default function Table() {
                         data={chartData}
                         margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                     >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#615f5fff" />
+                        <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="#615f5fff"
+                        />
                         <XAxis dataKey="month" stroke="#0b0c0cff" />
                         <YAxis stroke="#131414ff" />
                         <Tooltip />
@@ -408,6 +417,18 @@ export default function Table() {
                                         setEditEmail(e.target.value)
                                     }
                                 />
+                                <label>Status</label>
+                                <select
+                                    className="form-control mb-2"
+                                    value={editStatus}
+                                    onChange={(e) =>
+                                        setEditStatus(e.target.value)
+                                    }
+                                >
+                                    <option value="active">active</option>
+                                    <option value="pending">pending</option>
+                                    <option value="inactive">inactive</option>
+                                </select>
                             </div>
 
                             <div className="modal-footer">
@@ -475,15 +496,19 @@ export default function Table() {
                                     onChange={(e) => setNewRole(e.target.value)}
                                 />
                                 <label>Status</label>
-                                <input
+                                <select
                                     className="form-control mb-2"
-                                    minLength={3}
                                     required
                                     value={newStatus}
                                     onChange={(e) =>
                                         setNewStatus(e.target.value)
                                     }
-                                />
+                                >
+                                    <option value="">Select status</option>
+                                    <option value="active">active</option>
+                                    <option value="pending">pending</option>
+                                    <option value="inactive">inactive</option>
+                                </select>
 
                                 <label>Date</label>
                                 <input
@@ -513,7 +538,7 @@ export default function Table() {
                     </div>
                 </div>
             )}
-                   {showDeleteModal && (
+            {showDeleteModal && (
                 <div
                     className="modal fade show z-3"
                     style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
