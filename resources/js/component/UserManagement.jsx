@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import dataJson from "../data.json";
-import { FaTrash, FaSort, FaEdit } from "react-icons/fa";
 import SearchPerson from "./SearchPerson";
 import AddUserButton from "./AddUserButton";
 import UsersTable from "./UserTable";
