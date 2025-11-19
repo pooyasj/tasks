@@ -357,7 +357,7 @@ export default function Table() {
                 </ul>
             </div>
             {/* ----------نمودار----------------- */}
-            <div className="mt-5 p-4 bg-whi  rounded shadow mb-4 col">
+            <div className="mt-5 p-4 bg-white  rounded shadow mb-4 col">
                 <h5 className="mb-3">Users per month</h5>
 
                 <ResponsiveContainer width="100%" height={280}>
@@ -538,6 +538,8 @@ export default function Table() {
                     </div>
                 </div>
             )}
+            {/* ------ Delete User Modal ------- */}
+
             {showDeleteModal && (
                 <div
                     className="modal fade show z-3"
