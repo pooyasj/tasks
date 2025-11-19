@@ -82,6 +82,14 @@ export default function UserManagemant() {
         setShowAddModal(false);
     };
 
+    // تبدیل تاریخ همانند دیگر کاربران
+    const formDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString("en-us", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+        });
+    };
     // -------- Save New User --------
     const saveNewUser = () => {
         if (
@@ -107,10 +115,13 @@ export default function UserManagemant() {
             email: newEmail,
             role: newRole,
             status: newStatus,
-            date: newDate,
+            date: formDate(newDate),
         };
 
-        setUsers([...users, newUser]);
+        setUsers([newUser, ...users]);
+        // go to page 1
+        setCurrentPage(1);
+        setSearchParams({ page: 1 });
         closeAddModal();
     };
 
