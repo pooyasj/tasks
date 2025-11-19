@@ -17,6 +17,7 @@ A user management system that allows adding, editing, deleting, and organizing u
 - JavaScript (React)
 
 ### Frameworks / Libraries
+- bootStrap
 - react-router-dom
 - recharts
 - react-icons
