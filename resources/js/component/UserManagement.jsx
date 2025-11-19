@@ -11,7 +11,7 @@ import Pagination from "./Pagination";
 import Chart from "./Chart";
 import { useSearchParams } from "react-router-dom";
 
-export default function Table() {
+export default function UserManagemant() {
     const [users, setUsers] = useState(dataJson);
     const [sortAsc, setSortAsc] = useState(true);
 
