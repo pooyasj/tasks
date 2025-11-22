@@ -7,48 +7,54 @@ export default function UsersTable({
     sortByEmail,
     openEditModal,
     openDeleteModal,
-    getStatusClass
+    getStatusClass,
 }) {
     return (
         <div className="table-responsive">
             <table className="table table-dark table-striped">
                 <thead>
                     <tr>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                        <th>ID</th>
                         <th>
                             <span
                                 onClick={sortByName}
                                 style={{ cursor: "pointer" }}
-                                className="bg-primary me-1 rounded-1 fs-5 p-1"
+                                className="text-primary me-1 rounded-1 fs-5"
                             >
                                 <FaSort />
                             </span>
                             Name
                         </th>
-
                         <th>
                             <span
                                 onClick={sortByEmail}
                                 style={{ cursor: "pointer" }}
-                                className="bg-primary me-1 rounded-1 fs-5 p-1"
+                                className="text-primary me-1 rounded-1 fs-5 "
                             >
                                 <FaSort />
                             </span>
                             Email
                         </th>
-
-                        <th>Role</th>
+                        <th>ID</th>
                         <th>Status</th>
-                        <th>Date</th>
+                        <th>Role</th>
+                        <th>Joined Date</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {users.map((item) => (
                         <tr key={item.id}>
+                            <td>{item.name}</td> <td>{item.email}</td>
+                            <td>{item.id}</td>
                             <td>
+                                <span className={getStatusClass(item.status)}>
+                                    {item.status}
+                                </span>
+                            </td>
+                            <td>{item.role}</td> <td>{item.date}</td>
+                            <td className=" pb-3">
                                 <span
                                     className="text-info fs-5 style2"
                                     style={{ cursor: "pointer" }}
@@ -57,7 +63,6 @@ export default function UsersTable({
                                     <FaEdit />
                                 </span>
                             </td>
-
                             <td>
                                 <span
                                     className="text-danger style1"
@@ -67,19 +72,6 @@ export default function UsersTable({
                                     <FaTrash />
                                 </span>
                             </td>
-
-                            <td>{item.id}</td>
-                            <td>{item.name}</td>
-                            <td>{item.email}</td>
-                            <td>{item.role}</td>
-
-                            <td>
-                                <span className={getStatusClass(item.status)}>
-                                    {item.status}
-                                </span>
-                            </td>
-
-                            <td>{item.date}</td>
                         </tr>
                     ))}
                 </tbody>

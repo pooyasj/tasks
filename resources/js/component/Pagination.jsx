@@ -3,7 +3,7 @@ import React from 'react'
 export default function Pagination({currentPage , totalPages , goToPage}) {
   return (
     <>
-     <div className="mt-3 d-flex justify-content-center">
+     <div className="mt-3 d-flex justify-content-center  justify-content-md-end">
                     <ul className="pagination">
                         <li
                             className={`page-item ${

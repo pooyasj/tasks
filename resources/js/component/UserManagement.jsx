@@ -220,18 +220,25 @@ export default function UserManagemant() {
     };
     return (
         <>
+            <div className="row justify-content-center justify-content-md-between align-items-center  mx-0 ">
+                <div className="col-12 col-md-6 px-0">
+                    <div>
+                        <SearchPerson
+                            search={search}
+                            setSearch={(value) => {
+                                setSearch(value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                    </div>
+                </div>
+                <div className="col-12 col-md-6 row justify-content-center justify-content-md-end mx-0 px-0">
+                    <AddUserButton onClick={openAddModal} />
+                </div>
+            </div>
             {/* Search User  */}
 
-            <SearchPerson
-                search={search}
-                setSearch={(value) => {
-                    setSearch(value);
-                    setCurrentPage(1);
-                }}
-            />
-
             {/* Add User Button */}
-            <AddUserButton onClick={openAddModal} />
             {/* Table */}
             <UsersTable
                 users={currentUsers}

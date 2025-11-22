@@ -4,7 +4,7 @@ export default function SearchPerson({search , setSearch}) {
   return (
     <>
     {/* Search */}
-            <div className="mb-3 border border-2 border-dark rounded-3 w-100">
+            <div className="mb-3 border border-2 border-dark rounded-3 w-100 mb-0">
                 <input
                     type="text"
                     placeholder="Search"

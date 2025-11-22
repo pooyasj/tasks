@@ -7,5 +7,5 @@ Route::get('/', function () {
 });
 
 Route::get('/{any}', function () {
-    return view("user");
+    return view("welcome");
 })->where('any', '.*');
