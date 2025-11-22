@@ -19,7 +19,7 @@ export default function AddUserModal({
 
     return (
         <div
-            className="modal fade show z-2"
+            className="modal fade show style4"
             style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
         >
             <div className="modal-dialog">
