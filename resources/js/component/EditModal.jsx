@@ -15,7 +15,7 @@ export default function EditModal({
 
     return (
         <div
-            className="modal fade show z-1"
+            className="modal fade show "
             style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
         >
             <div className="modal-dialog">

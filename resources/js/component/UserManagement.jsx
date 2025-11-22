@@ -126,7 +126,6 @@ export default function UserManagemant() {
     };
 
     // -------- Delete User --------
-    // -------- Delete User --------
     const deleteUser = (id) => {
         setUsers(users.filter((u) => u.id !== id));
     };
@@ -233,7 +232,6 @@ export default function UserManagemant() {
 
             {/* Add User Button */}
             <AddUserButton onClick={openAddModal} />
-
             {/* Table */}
             <UsersTable
                 users={currentUsers}

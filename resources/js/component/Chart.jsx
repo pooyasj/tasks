@@ -21,7 +21,7 @@ export default function Chart({chartData}) {
                        >
                            <CartesianGrid
                                strokeDasharray="3 3"
-                               stroke="#615f5fff"
+                               stroke="#000000ff"
                            />
                            <XAxis dataKey="month" stroke="#0b0c0cff" />
                            <YAxis stroke="#131414ff" />
