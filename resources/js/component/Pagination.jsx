@@ -3,10 +3,10 @@ import React from 'react'
 export default function Pagination({currentPage , totalPages , goToPage}) {
   return (
     <>
-     <div className="mt-3 d-flex justify-content-center  justify-content-md-end">
+     <div className="mt-3 d-flex justify-content-center  justify-content-md-end ">
                     <ul className="pagination">
                         <li
-                            className={`page-item ${
+                            className={`page-item rounded-4 ${
                                 currentPage === 1 && "disabled"
                             }`}
                         >

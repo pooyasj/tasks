@@ -16,7 +16,6 @@ export default function AddUserModal({
     saveNewUser,
 }) {
     if (!show) return null;
-
     return (
         <div
             className="modal fade show style4"
@@ -78,16 +77,14 @@ export default function AddUserModal({
                             className="form-control"
                             type="date"
                             required
+                            max={new Date().toISOString().split("T")[0]}
                             value={newDate}
                             onChange={(e) => setNewDate(e.target.value)}
                         />
                     </div>
 
                     <div className="modal-footer">
-                        <button
-                            className="btn btn-secondary"
-                            onClick={close}
-                        >
+                        <button className="btn btn-secondary" onClick={close}>
                             Cancel
                         </button>
 

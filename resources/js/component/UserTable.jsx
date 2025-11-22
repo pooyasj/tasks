@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTrash, FaSort, FaEdit } from "react-icons/fa";
+import { FaTrash, FaSort, FaEdit, FaSearch } from "react-icons/fa";
 
 export default function UsersTable({
     users,
@@ -10,11 +10,12 @@ export default function UsersTable({
     getStatusClass,
 }) {
     return (
-        <div className="table-responsive">
+        <div className="table-responsive rounded-3">
             <table className="table table-dark table-striped">
                 <thead>
-                    <tr>
-                        <th>
+                    <tr className="bg-primary text-danger">
+                        <th className="text-center">ID</th>
+                        <th className=" text-start">
                             <span
                                 onClick={sortByName}
                                 style={{ cursor: "pointer" }}
@@ -22,9 +23,9 @@ export default function UsersTable({
                             >
                                 <FaSort />
                             </span>
-                            Name
+                            FullName
                         </th>
-                        <th>
+                        <th className="text-start">
                             <span
                                 onClick={sortByEmail}
                                 style={{ cursor: "pointer" }}
@@ -34,29 +35,37 @@ export default function UsersTable({
                             </span>
                             Email
                         </th>
-                        <th>ID</th>
-                        <th>Status</th>
-                        <th>Role</th>
+                        <th className="text-center">Status</th>
+                        <th className="text-start">Role</th>
                         <th>Joined Date</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th colSpan={2}>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {users.map((item) => (
                         <tr key={item.id}>
-                            <td>{item.name}</td> <td>{item.email}</td>
-                            <td>{item.id}</td>
-                            <td>
-                                <span className={getStatusClass(item.status)}>
+                            <td className="text-center col col-md-1">
+                                {item.id}
+                            </td>
+                            <td className="text-start col">{item.name}</td>
+                            <td className="text-start col col-md-2">
+                                {item.email}
+                            </td>
+                            <td className="text-center col">
+                                <span
+                                    className={`status-label ${getStatusClass(
+                                        item.status
+                                    )}`}
+                                >
                                     {item.status}
                                 </span>
                             </td>
-                            <td>{item.role}</td> <td>{item.date}</td>
-                            <td className=" pb-3">
+                            <td className="text-start col-md-1">{item.role}</td>{" "}
+                            <td>{item.date}</td>
+                            <td>
                                 <span
-                                    className="text-info fs-5 style2"
+                                    className="text-info  style2"
                                     style={{ cursor: "pointer" }}
                                     onClick={() => openEditModal(item)}
                                 >

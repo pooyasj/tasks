@@ -221,7 +221,7 @@ export default function UserManagemant() {
     return (
         <>
             <div className="row justify-content-center justify-content-md-between align-items-center  mx-0 ">
-                <div className="col-12 col-md-6 px-0">
+                <div className="col-12 col-md-5 px-0">
                     <div>
                         <SearchPerson
                             search={search}
