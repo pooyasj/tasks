@@ -1,90 +1,172 @@
 import React from "react";
 import { FaTrash, FaSort, FaEdit, FaSearch } from "react-icons/fa";
-
+import { FaTrashAlt } from "react-icons/fa";
 export default function UsersTable({
     users,
     sortByName,
     sortByEmail,
+    sortByRole,
     openEditModal,
     openDeleteModal,
     getStatusClass,
+    sortByStatus,
 }) {
     return (
-        <div className="table-responsive rounded-3">
-            <table className="table table-dark table-striped">
-                <thead>
-                    <tr className="bg-primary text-danger">
-                        <th className="text-center">ID</th>
-                        <th className=" text-start">
-                            <span
+        <>
+            {/* ---------------------------For mobile size--------------------------------- */}
+            <div className="container-fluid px-0  d-sm-none">
+                <div className="row justify-content-center align-items-center px-1">
+                    <div className="col row justify-content-center align-items-center px-0">
+                        <div className=" col d-flex justify-content-center d-sm-none mb-2 p-0">
+                            <button
                                 onClick={sortByName}
-                                style={{ cursor: "pointer" }}
-                                className="text-primary me-1 rounded-1 fs-5"
+                                className="btn btn-white btn-sm px-0"
                             >
-                                <FaSort />
-                            </span>
-                            FullName
-                        </th>
-                        <th className="text-start">
-                            <span
+                                Name <FaSort className="ms-0 text-primary" />
+                            </button>
+                        </div>
+                        <div className=" col d-flex justify-content-center d-sm-none mb-2 p-0">
+                            <button
                                 onClick={sortByEmail}
-                                style={{ cursor: "pointer" }}
-                                className="text-primary me-1 rounded-1 fs-5 "
+                                className="btn btn-white btn-sm px-0"
                             >
-                                <FaSort />
-                            </span>
-                            Email
-                        </th>
-                        <th className="text-center">Status</th>
-                        <th className="text-start">Role</th>
-                        <th>Joined Date</th>
-                        <th colSpan={2}>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {users.map((item) => (
-                        <tr key={item.id}>
-                            <td className="text-center col col-md-1">
-                                {item.id}
-                            </td>
-                            <td className="text-start col">{item.name}</td>
-                            <td className="text-start col col-md-2">
-                                {item.email}
-                            </td>
-                            <td className="text-center col">
+                                Email <FaSort className="ms-0 text-primary" />
+                            </button>
+                        </div>
+                        <div className=" col d-flex justify-content-center d-sm-none mb-2 p-0">
+                            <button
+                                onClick={sortByStatus}
+                                className="btn btn-white btn-sm px-0"
+                            >
+                                Status <FaSort className="ms-0 text-primary" />
+                            </button>
+                        </div>
+                        <div className=" col d-flex justify-content-center d-sm-none mb-2 p-0">
+                            <button
+                                onClick={sortByRole}
+                                className="btn btn-white btn-sm px-0"
+                            >
+                                Role <FaSort className="ms-0 text-primary" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* ---------------------------------------------------------------------------- */}
+            <div className="table-responsive">
+                <table className="table  table-striped">
+                    {/* ------------------------------thead------------------------------- */}
+                    <thead>
+                        <tr>
+                            <th className=" text-start  ps-4">
+                                Full Name
                                 <span
-                                    className={`status-label ${getStatusClass(
-                                        item.status
-                                    )}`}
-                                >
-                                    {item.status}
-                                </span>
-                            </td>
-                            <td className="text-start col-md-1">{item.role}</td>{" "}
-                            <td>{item.date}</td>
-                            <td>
-                                <span
-                                    className="text-info  style2"
+                                    onClick={sortByName}
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => openEditModal(item)}
+                                    className="text-primary ms-1 rounded-1 fs-5"
                                 >
-                                    <FaEdit />
+                                    <FaSort />
                                 </span>
-                            </td>
-                            <td>
+                            </th>
+                            <th className="text-start">
+                                Email
                                 <span
-                                    className="text-danger style1"
+                                    onClick={sortByEmail}
                                     style={{ cursor: "pointer" }}
-                                    onClick={() => openDeleteModal(item)}
+                                    className="text-primary ms-2 rounded-1 fs-5 "
                                 >
-                                    <FaTrash />
+                                    <FaSort />
                                 </span>
-                            </td>
+                            </th>
+                            <th className="text-center">
+                                Status
+                                <span
+                                    onClick={sortByStatus}
+                                    style={{ cursor: "pointer" }}
+                                    className="text-primary ms-2 rounded-1 fs-5 "
+                                >
+                                    <FaSort />
+                                </span>
+                            </th>
+                            <th className="text-start">
+                                Role
+                                <span
+                                    onClick={sortByRole}
+                                    style={{ cursor: "pointer" }}
+                                    className="text-primary ms-2 rounded-1 fs-5 "
+                                >
+                                    <FaSort />
+                                </span>
+                            </th>
+                            <th>Joined Date</th>
+                            <th colSpan={2}>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    {/* ------------------------------tbody------------------------------- */}
+                    <tbody>
+                        {users.map((item) => (
+                            <tr key={item.id}>
+                                <td
+                                    data-label="Name"
+                                    className="text-start col ps-md-4"
+                                >
+                                    {item.name}
+                                </td>
+                                <td
+                                    data-label="Email"
+                                    className="text-start col col-md-2 "
+                                >
+                                    <span className="style6">{item.email}</span>
+                                </td>
+                                <td
+                                    data-label="Status"
+                                    className="text-center col"
+                                >
+                                    <span
+                                        className={`status-label ${getStatusClass(
+                                            item.status
+                                        )}`}
+                                    >
+                                        {item.status}
+                                    </span>
+                                </td>
+                                <td
+                                    data-label="Role"
+                                    className="text-start col-md-1"
+                                >
+                                    {item.role}
+                                </td>
+                                <td data-label="Data">{item.date}</td>
+                                <td
+                                    data-label="Edit User"
+                                    className=" text-end"
+                                >
+                                    <span
+                                        className="text-primary  style2"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => openEditModal(item)}
+                                    >
+                                        <FaEdit />
+                                    </span>
+                                </td>
+                                <td
+                                    data-label="Delete"
+                                    className=" text-start border-0"
+                                >
+                                    <span
+                                        className="text-danger style1"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => openDeleteModal(item)}
+                                    >
+                                        <FaTrashAlt />
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                    {/* ------------------------------------------------------- */}
+                </table>
+            </div>
+        </>
     );
 }

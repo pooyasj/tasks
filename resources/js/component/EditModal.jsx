@@ -15,10 +15,10 @@ export default function EditModal({
 
     return (
         <div
-            className="modal fade show "
+            className="modal fade show"
             style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
         >
-            <div className="modal-dialog">
+            <div className="modal-dialog ">
                 <div className="modal-content bg-dark text-white">
                     <div className="modal-header">
                         <h5>Edit User</h5>
@@ -56,10 +56,7 @@ export default function EditModal({
                     </div>
 
                     <div className="modal-footer">
-                        <button
-                            className="btn btn-secondary"
-                            onClick={close}
-                        >
+                        <button className="btn btn-secondary" onClick={close}>
                             Cancel
                         </button>
                         <button

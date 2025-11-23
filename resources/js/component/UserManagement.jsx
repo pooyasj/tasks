@@ -23,8 +23,19 @@ export default function UserManagemant() {
     const [search, setSearch] = useState("");
 
     // Pagination
-    const usersPerPage = 10;
+    const [usersPerPage, setUsersPerPage] = useState(10);
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 576px)");
 
+        const updateSize = () => {
+            setUsersPerPage(mq.matches ? 4 : 10);
+        };
+
+        updateSize(); 
+        mq.addEventListener("change", updateSize);
+
+        return () => mq.removeEventListener("change", updateSize);
+    }, []);
     // -------- Edit Modal State --------
     const [showEditModal, setShowEditModal] = useState(false);
     const [editUser, setEditUser] = useState(null);
@@ -82,7 +93,7 @@ export default function UserManagemant() {
         setShowAddModal(false);
     };
 
-    // تبدیل تاریخ همانند دیگر کاربران
+    // -------- Convert date format --------
     const formDate = (dateString) => {
         return new Date(dateString).toLocaleDateString("en-us", {
             year: "numeric",
@@ -141,6 +152,33 @@ export default function UserManagemant() {
         setSortAsc(!sortAsc);
     };
 
+    const sortByStatus = () => {
+        const sorted = [...users].sort((a, b) =>
+            sortAsc
+                ? a.status.localeCompare(b.status)
+                : b.status.localeCompare(a.status)
+        );
+        setUsers(sorted);
+        setSortAsc(!sortAsc);
+    };
+    const sortByRole = () => {
+        const sorted = [...users].sort((a, b) =>
+            sortAsc
+                ? a.role.localeCompare(b.role)
+                : b.role.localeCompare(a.role)
+        );
+        setUsers(sorted);
+        setSortAsc(!sortAsc);
+    };
+    const sortByEmail = () => {
+        const sorted = [...users].sort((a, b) =>
+            sortAsc
+                ? a.email.localeCompare(b.email)
+                : b.email.localeCompare(a.email)
+        );
+        setUsers(sorted);
+        setSortAsc(!sortAsc);
+    };
     // -------- Filtering --------
     const filteredUsers = users.filter((user) =>
         Object.values(user).some((value) =>
@@ -159,7 +197,7 @@ export default function UserManagemant() {
         setCurrentPage(page);
         setSearchParams({ page: page });
     };
-    // --------------نمودار----------------
+    // --------------Chart----------------
     // Prepare monthly signup chart
     const monthNames = [
         "Jan",
@@ -184,23 +222,18 @@ export default function UserManagemant() {
             monthlyCount[monthIndex] += 1;
         }
     });
+    // ------------For chart--------------
 
     const chartData = monthNames.map((m, i) => ({
         month: m,
         count: monthlyCount[i],
     }));
+    // ---------Change title----------------
+
     useEffect(function () {
         document.title = "user management";
     }, []);
-    const sortByEmail = () => {
-        const sorted = [...users].sort((a, b) =>
-            sortAsc
-                ? a.email.localeCompare(b.email)
-                : b.email.localeCompare(a.email)
-        );
-        setUsers(sorted);
-        setSortAsc(!sortAsc);
-    };
+
     // ---------style status----------------
     const getStatusClass = (status) => {
         switch (status.toLowerCase()) {
@@ -221,6 +254,7 @@ export default function UserManagemant() {
     return (
         <>
             <div className="row justify-content-center justify-content-md-between align-items-center  mx-0 ">
+                {/* Search User  */}
                 <div className="col-12 col-md-5 px-0">
                     <div>
                         <SearchPerson
@@ -232,18 +266,19 @@ export default function UserManagemant() {
                         />
                     </div>
                 </div>
+                {/* Add User Button */}
                 <div className="col-12 col-md-6 row justify-content-center justify-content-md-end mx-0 px-0">
                     <AddUserButton onClick={openAddModal} />
                 </div>
             </div>
-            {/* Search User  */}
 
-            {/* Add User Button */}
             {/* Table */}
             <UsersTable
                 users={currentUsers}
                 sortByName={sortByName}
                 sortByEmail={sortByEmail}
+                sortByStatus={sortByStatus}
+                sortByRole={sortByRole}
                 openEditModal={openEditModal}
                 openDeleteModal={(user) => {
                     setUserToDelete(user);
@@ -258,7 +293,7 @@ export default function UserManagemant() {
                 totalPages={totalPages}
                 goToPage={goToPage}
             />
-            {/* ----------نمودار----------------- */}
+            {/* ----------chart----------------- */}
             <Chart chartData={chartData} />
             {/* -------- Edit Modal -------- */}
             <EditModal
