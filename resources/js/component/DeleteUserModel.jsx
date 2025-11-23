@@ -1,11 +1,6 @@
 import React from "react";
 
-export default function DeleteUserModal({
-    show,
-    user,
-    close,
-    confirmDelete
-}) {
+export default function DeleteUserModal({ show, user, close, confirmDelete }) {
     if (!show) return null;
 
     return (
@@ -15,7 +10,6 @@ export default function DeleteUserModal({
         >
             <div className="modal-dialog">
                 <div className="modal-content bg-dark text-white">
-                    
                     <div className="modal-header">
                         <h5>Delete User</h5>
                         <button
@@ -30,10 +24,7 @@ export default function DeleteUserModal({
                     </div>
 
                     <div className="modal-footer">
-                        <button
-                            className="btn btn-secondary"
-                            onClick={close}
-                        >
+                        <button className="btn btn-secondary" onClick={close}>
                             Cancel
                         </button>
 
@@ -44,7 +35,6 @@ export default function DeleteUserModal({
                             Delete
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>

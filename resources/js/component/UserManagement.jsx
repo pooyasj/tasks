@@ -31,7 +31,7 @@ export default function UserManagemant() {
             setUsersPerPage(mq.matches ? 4 : 10);
         };
 
-        updateSize(); 
+        updateSize();
         mq.addEventListener("change", updateSize);
 
         return () => mq.removeEventListener("change", updateSize);

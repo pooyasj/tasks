@@ -151,7 +151,7 @@ export default function UsersTable({
                                 </td>
                                 <td
                                     data-label="Delete"
-                                    className=" text-start border-0"
+                                    className="text-start border-0"
                                 >
                                     <span
                                         className="text-danger style1"

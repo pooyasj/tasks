@@ -59,6 +59,7 @@
     vertical-align: top;
     border-color: var(--bs-table-border-color);
 }
+/* ------------------------------------------------------------ */
 /* حالت موبایل */
 @media (max-width: 576px) {
     .table {
@@ -106,3 +107,4 @@
         border-radius: 0px !important;
     }
 }
+/* ---------------------------------------------------------------- */

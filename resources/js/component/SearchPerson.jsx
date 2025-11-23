@@ -20,7 +20,7 @@ export default function SearchPerson({ search, setSearch }) {
             <input
                 type="text"
                 placeholder="Search"
-                className="form-control ps-5" 
+                className="form-control ps-5"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
