@@ -31,8 +31,8 @@ export default function AddUserModal({
                         ></button>
                     </div>
 
-                    <div className="modal-body">
-                        <label>Name</label>
+                    <div className="modal-body text-start">
+                        <label className="ms-2 opacity-50 mb-md-1">Name</label>
                         <input
                             className="form-control mb-2"
                             minLength={3}
@@ -41,7 +41,7 @@ export default function AddUserModal({
                             onChange={(e) => setNewName(e.target.value)}
                         />
 
-                        <label>Email</label>
+                        <label className="ms-2 opacity-50 mb-md-1">Email</label>
                         <input
                             className="form-control mb-2"
                             type="email"
@@ -50,7 +50,7 @@ export default function AddUserModal({
                             onChange={(e) => setNewEmail(e.target.value)}
                         />
 
-                        <label>Role</label>
+                        <label className="ms-2 opacity-50 mb-md-1">Role</label>
                         <input
                             className="form-control mb-2"
                             minLength={3}
@@ -59,7 +59,7 @@ export default function AddUserModal({
                             onChange={(e) => setNewRole(e.target.value)}
                         />
 
-                        <label>Status</label>
+                        <label className="ms-2 opacity-50 mb-md-1">Status</label>
                         <select
                             className="form-control mb-2"
                             required
@@ -72,7 +72,7 @@ export default function AddUserModal({
                             <option value="inactive">inactive</option>
                         </select>
 
-                        <label>Date</label>
+                        <label className="ms-2 opacity-50 mb-md-1">Date</label>
                         <input
                             className="form-control"
                             type="date"

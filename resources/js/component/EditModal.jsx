@@ -28,22 +28,22 @@ export default function EditModal({
                         ></button>
                     </div>
 
-                    <div className="modal-body">
-                        <label>Name</label>
+                    <div className="modal-body text-start ">
+                        <label className=" opacity-50 mb-md-1 ms-md-1">Name</label>
                         <input
                             className="form-control mb-2"
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
                         />
 
-                        <label>Email</label>
+                        <label className=" opacity-50 mb-md-1 ms-md-1">Email</label>
                         <input
                             className="form-control"
                             value={editEmail}
                             onChange={(e) => setEditEmail(e.target.value)}
                         />
 
-                        <label>Status</label>
+                        <label className=" opacity-50 mb-md-1 ms-md-1">Status</label>
                         <select
                             className="form-control mb-2"
                             value={editStatus}
