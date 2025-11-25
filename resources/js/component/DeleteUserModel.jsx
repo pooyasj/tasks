@@ -9,7 +9,7 @@ export default function DeleteUserModal({ show, user, close, confirmDelete }) {
             style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
         >
             <div className="modal-dialog">
-                <div className="modal-content bg-dark text-white">
+                <div className="modal-content bg-white text-dark">
                     <div className="modal-header">
                         <h5>Delete User</h5>
                         <button

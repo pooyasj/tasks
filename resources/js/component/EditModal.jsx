@@ -19,7 +19,7 @@ export default function EditModal({
             style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
         >
             <div className="modal-dialog ">
-                <div className="modal-content bg-dark text-white">
+                <div className="modal-content bg-white text-dark">
                     <div className="modal-header">
                         <h5>Edit User</h5>
                         <button
@@ -29,23 +29,23 @@ export default function EditModal({
                     </div>
 
                     <div className="modal-body text-start ">
-                        <label className=" opacity-50 mb-md-1 ms-md-1">Name</label>
+                        <label className=" opacity-75 mb-md-1 ms-md-1">Name</label>
                         <input
-                            className="form-control mb-2"
+                            className="form-control mb-2 border-dark border-opacity-50"
                             value={editName}
                             onChange={(e) => setEditName(e.target.value)}
                         />
 
-                        <label className=" opacity-50 mb-md-1 ms-md-1">Email</label>
+                        <label className=" opacity-75 mb-md-1 ms-md-1">Email</label>
                         <input
-                            className="form-control"
+                            className="form-control border-dark border-opacity-50"
                             value={editEmail}
                             onChange={(e) => setEditEmail(e.target.value)}
                         />
 
-                        <label className=" opacity-50 mb-md-1 ms-md-1">Status</label>
+                        <label className=" opacity-75 mb-md-1 ms-md-1">Status</label>
                         <select
-                            className="form-control mb-2"
+                            className="form-control mb-2 border-dark border-opacity-50"
                             value={editStatus}
                             onChange={(e) => setEditStatus(e.target.value)}
                         >

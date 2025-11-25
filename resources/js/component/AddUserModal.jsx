@@ -22,7 +22,7 @@ export default function AddUserModal({
             style={{ display: "block", background: "rgba(0,0,0,0.7)" }}
         >
             <div className="modal-dialog">
-                <div className="modal-content bg-dark text-white">
+                <div className="modal-content bg-white text-dark">
                     <div className="modal-header">
                         <h5>Add User</h5>
                         <button
@@ -31,50 +31,50 @@ export default function AddUserModal({
                         ></button>
                     </div>
 
-                    <div className="modal-body text-start">
-                        <label className="ms-2 opacity-50 mb-md-1">Name</label>
+                    <div className="modal-body text-start ">
+                        <label className="ms-2 opacity-75 mb-md-1">Name</label>
                         <input
-                            className="form-control mb-2"
+                            className="form-control mb-2 border-dark border-opacity-50"
                             minLength={3}
                             required
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                         />
 
-                        <label className="ms-2 opacity-50 mb-md-1">Email</label>
+                        <label className="ms-2 opacity-75 mb-md-1">Email</label>
                         <input
-                            className="form-control mb-2"
+                            className="form-control mb-2 border-dark border-opacity-50"
                             type="email"
                             required
                             value={newEmail}
                             onChange={(e) => setNewEmail(e.target.value)}
                         />
 
-                        <label className="ms-2 opacity-50 mb-md-1">Role</label>
+                        <label className="ms-2 opacity-75 mb-md-1">Role</label>
                         <input
-                            className="form-control mb-2"
+                            className="form-control mb-2 border-dark border-opacity-50"
                             minLength={3}
                             required
                             value={newRole}
                             onChange={(e) => setNewRole(e.target.value)}
                         />
 
-                        <label className="ms-2 opacity-50 mb-md-1">Status</label>
+                        <label className="ms-2 opacity-75 mb-md-1">Status</label>
                         <select
-                            className="form-control mb-2"
+                            className="form-control mb-2 border-dark border-opacity-50"
                             required
                             value={newStatus}
                             onChange={(e) => setNewStatus(e.target.value)}
                         >
-                            <option value="">Select status</option>
+                            <option value=""><span>Select status</span></option>
                             <option value="active">active</option>
                             <option value="pending">pending</option>
                             <option value="inactive">inactive</option>
                         </select>
 
-                        <label className="ms-2 opacity-50 mb-md-1">Date</label>
+                        <label className="ms-2 opacity-75 mb-md-1">Date</label>
                         <input
-                            className="form-control"
+                            className="form-control border-dark border-opacity-50"
                             type="date"
                             required
                             max={new Date().toISOString().split("T")[0]}
