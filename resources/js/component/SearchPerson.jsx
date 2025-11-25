@@ -12,7 +12,7 @@ export default function SearchPerson({ search, setSearch }) {
                     top: "50%",
                     left: "12px",
                     transform: "translateY(-50%)",
-                    color: "#555",
+                    color: "#0033daff",
                 }}
             />
 

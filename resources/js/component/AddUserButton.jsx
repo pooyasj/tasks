@@ -7,7 +7,7 @@ export default function AddUserButton({ onClick }) {
             className="btn  mb-3 col-12 col-md-3  d-flex align-items-center justify-content-center gap-2 style5"
             onClick={onClick}
         >
-            <FiPlus size={18} />
+            <FiPlus size={18} style={{color:"#295afcff"}} />
             Add User
         </button>
     );

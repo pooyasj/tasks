@@ -238,11 +238,11 @@ export default function UserManagemant() {
     const getStatusClass = (status) => {
         switch (status.toLowerCase()) {
             case "active":
-                return "text-dark fs-6  bg-success rounded-1 p-1"; // سبز
+                return "text-white fs-6  bg-success rounded-1 p-1"; // سبز
             case "inactive":
-                return "text-dark fs-6  bg-danger rounded-1 p-1"; // قرمز
+                return "text-white fs-6  bg-danger rounded-1 p-1"; // قرمز
             case "pending":
-                return "text-dark fs-6  bg-warning rounded-1 p-1"; // زرد
+                return "text-white fs-6 rounded-1 p-1 style8"; // زرد
             default:
                 return "";
         }

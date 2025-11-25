@@ -12,7 +12,7 @@ export default function Chart({ chartData }) {
     return (
         <>
             <div className="mt-5 p-4 bg-white  rounded shadow mb-4 col ">
-                <h5 className="mb-3">Users per month</h5>
+                <h5 className="mb-3 text-primary">Users per month</h5>
 
                 <ResponsiveContainer width="100%" height={280}>
                     <LineChart
@@ -24,8 +24,8 @@ export default function Chart({ chartData }) {
                             strokeDasharray="4 4"
                             stroke="#00041dff"
                         />
-                        <XAxis dataKey="month" stroke="#0b0c0cff" />
-                        <YAxis stroke="#131414ff" />
+                        <XAxis dataKey="month" stroke="#00205aff" />
+                        <YAxis stroke="#00205aff" />
                         <Tooltip />
                         <Line
                             type="monotone"
